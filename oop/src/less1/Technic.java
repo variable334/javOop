@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class Technic {
 
-    protected  String nameModel;
+    protected String nameModel;
     protected int price;
 
 
@@ -38,6 +38,8 @@ public class Technic {
         return price;
     }
 
+    /* переопределение euquals, hashCode, toString */
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -52,7 +54,7 @@ public class Technic {
     }
 
 
-        @Override
+    @Override
     public String toString() {
         return getTechnicType() + "{" +
                 " nameModel = '" + nameModel + '\'' +
