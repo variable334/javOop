@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Objects;
 
 
-public abstract class Product {
+public class Product {
 
     protected double price;
     public String vendorcode;
@@ -44,7 +44,7 @@ public abstract class Product {
 
 
 
-//  переопределения equals,hashcode,toString
+//  переопределения equals, hashcode, toString
 
     @Override
     public boolean equals(Object o) {

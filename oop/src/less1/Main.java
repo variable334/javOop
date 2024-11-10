@@ -1,16 +1,17 @@
 package less1;
+
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 
+import less1.Person.Person;
+import less1.Person.Tree.Tree;
 
-import less1.Tree.Tree;
-import less1.products.Milk;
-import less1.products.Water;
+import less1.Person.FileOperations;
 import less1.products2.Laptop;
 
 
-
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.List;
 
@@ -275,61 +276,110 @@ public class Main {
     }
 
 
-    public static void main(String[] args) {
-
-    Person john = new Person("John",1963);
-
-    Person sara = new Person("Sara",1960);
-
-    Person adel = new Person("Adel",2029);
-
-    Person mikhail = new Person("Mikhail",2030);
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
 
 
-
-    adel.setMother("Sara");         // Адель дочь Джона и Сары
-    adel.setFather("John");
-
-    mikhail.setMother("Sara");      // Михаил сын Джона и Сары
-    mikhail.setFather("John");
-
-
-    john.addChild(adel);            // John отец Адель и Михаила
-    john.addChild(mikhail);
-
-    sara.addChild(adel);            // Sara мать Адель и Михаила
-    sara.addChild(mikhail);
-
-                            // Древо
-
-    Tree list = new Tree();
-
-    list.addPerson(john);
-    list.addPerson(sara);
-    list.addPerson(adel);
-    list.addPerson(mikhail);
+        Person john = new Person("John", 1963);
+        Person sara = new Person("Sara", 1960);
+        Person adel = new Person("Adel", 1990);
+        Person mikhail = new Person("Mikhail", 1993);
+        Person lama_su = new Person("Lama-su", 1970);
+        Person dick = new Person("Dick", 1962);
+        Person sam = new Person("Sam", 1963);
+        Person eina = new Person("Eina", 1965);
 
 
-    List<Person>lists = john.getChildren();
+        john.setSpouse(sara);
 
-    for (Person person:lists){
+        adel.setMother(sara);
+        adel.setFather(john);
 
-        System.out.println("Дети Джона: "  + person.getName());
-
-    }
-
-
+        mikhail.setFather(john);
+        mikhail.setMother(sara);
 
 
+        john.addSiblings(dick);
+        john.addSiblings(lama_su);
+        sara.addSiblings(eina);
+        sara.addSiblings(sam);
+
+        Tree tree = new Tree();
+
+        tree.addPerson(john);
+        tree.addPerson(sara);
+        tree.addPerson(adel);
+        tree.addPerson(mikhail);
+        tree.addPerson(dick);
+        tree.addPerson(lama_su);
+        tree.addPerson(eina);
+        tree.addPerson(sam);
+
+        tree.showRelatives();
+
+
+        Person foundPerson = tree.findPerson("Jonh");
+
+
+        System.out.println();
+
+        FileOperations fileOperations = new FileOperations();
+
+        try {
+            fileOperations.saves(tree, "familyTree.dat");
+            System.out.println("Файл сохранён");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println();
+
+        Tree loadtree = null;
+
+        try {
+            loadtree = fileOperations.load("familyTree.dat");
+            System.out.println("Фамильное дерево загружено из файла");
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println();
+
+        if (loadtree != null) {
+            for (Person person : loadtree.getListOfRelatives()) {
+                System.out.println("Loaded person:" +
+                        person.getName() + " " + person.getYearOfBirth());
+            }
+        }
 
 
 
-
-
-
-
-
-
+//        FluingAnimal duck = new Duck("Donald");
+//
+//        MovingAnimals cat = new Cat("Tom");
+//
+//        MovingAnimals dog = new Dog("Rex");
+//
+////        ((FluingAnimal)duck).fly();
+////        Duck duck1 = new Duck("ducks");
+////        duck1.fly();
+//
+//        Swimmabl Duck = (Swimmabl) duck;
+//        Movement Cat = (Movement) cat;
+//        Movement Dog = (Movement) dog;
+//
+//        System.out.println();
+//
+//        duck.eat();
+//        duck.fly();
+//        Duck.swimm(12);
+//        System.out.println();
+//        cat.eat();
+//        Cat.move(1);
+//        System.out.println();
+//        dog.eat();
+//        Dog.move(2);
+////
+//        System.out.println();
 
 
 //        Set<Laptop> laptops = new LinkedHashSet<>();
@@ -413,5 +463,5 @@ public class Main {
 //        System.out.println(products);
 
 
+        }
     }
-}
