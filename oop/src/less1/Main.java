@@ -323,6 +323,7 @@ public class Main {
 
             Human human = new Human(userScaner.scanner());
             marketproduct.acceptToMarket(human);
+            System.out.println(marketproduct.getActors());
             System.out.println("Здравствуйте " + human.getName() + " !" + " Вы вошли в Маркет,ознакомьтесь с нашим ассортиментом");
             PrintMarketProduct.printMarket(mp.getProductMap());
             System.out.println();
@@ -371,6 +372,8 @@ public class Main {
                     }
                 }
                 System.out.println(marketproduct.getQueue());
+                marketproduct.releaseFromMarket(marketproduct.getActors());
+                System.out.println(marketproduct.getActors());
 
 
             }

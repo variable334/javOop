@@ -7,7 +7,7 @@ import java.util.*;
 
 public class Market implements QueueBehaviour, MarketBehaviourt {
 
-    private List<Human> actors = new ArrayList<>();
+    private List<Actor> actors = new ArrayList<>();
 
     private ArrayDeque<Actor> queue;
 
@@ -18,9 +18,6 @@ public class Market implements QueueBehaviour, MarketBehaviourt {
     protected Human human;
 
     private UserScaner userScaner;
-
-
-
 
 
     public Market(Map<String, Map<String, List<Product>>> productMap) {
@@ -44,7 +41,7 @@ public class Market implements QueueBehaviour, MarketBehaviourt {
 
 
 
-    public List<Human> getActors() {
+    public List<Actor> getActors() {
         return actors;
     }
 
@@ -56,7 +53,7 @@ public class Market implements QueueBehaviour, MarketBehaviourt {
     public void acceptToMarket(Human human) {
 
         actors.add(human);
-//        takeInQueue(human);
+
     }
 
 
