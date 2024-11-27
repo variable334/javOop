@@ -2,14 +2,16 @@ package less1;
 
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 
-import less1.Person.Person;
-import less1.Person.Tree.Tree;
-
-import less1.Person.FileOperations;
-import less1.products2.Laptop;
+import less1.Actor.*;
+import less1.Product.Fruits.Fruits;
+import less1.Product.MarketForProducts.MarketProducts;
+import less1.Product.Product;
+import less1.Product.Vegetables.Vegetables;
+import less1.productsTechnic.Laptop;
 
 
 import java.util.*;
@@ -276,81 +278,187 @@ public class Main {
     }
 
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
+
+        Product apple = new Fruits("apple", 140.5, LocalDate.of(2024, 11, 13), 12, 1.0);
+        Product banana = new Fruits("banana", 152.4, LocalDate.of(2024, 11, 3), 9, 1.0);
+        Product grape = new Fruits("grape", 100, LocalDate.of(2024, 11, 1), 7, 1.0);
+
+        Product cabbage = new Vegetables("cabbage", 70, LocalDate.of(2024, 11, 12), 12, 1.0);
+        Product radish = new Vegetables("radish", 60, LocalDate.of(2024, 11, 1), 19, 1.0);
+        Product eggplant = new Vegetables("eggplant", 40, LocalDate.of(2024, 11, 3), 13, 1.0);
+
+        MarketProducts mpFruitsApple = new MarketProducts();
+        MarketProducts mpFruitsBanana = new MarketProducts();
+        MarketProducts mpFruitsGrape = new MarketProducts();
+
+        MarketProducts mpVegetablesCabbage = new MarketProducts();
+        MarketProducts mpVegetablesEggplant = new MarketProducts();
+        MarketProducts mpVegetablesRadish = new MarketProducts();
+
+        mpFruitsApple.addProduct(List.of(apple, apple, apple, apple, apple, apple));
+        mpFruitsBanana.addProduct(List.of(banana, banana, banana, banana, banana, banana));
+        mpFruitsGrape.addProduct(List.of(grape, grape, grape, grape, grape, grape, grape));
+
+        mpVegetablesCabbage.addProduct(List.of(cabbage, cabbage, cabbage, cabbage, cabbage, cabbage));
+        mpVegetablesEggplant.addProduct(List.of(eggplant, eggplant, eggplant, eggplant, eggplant, eggplant));
+        mpVegetablesRadish.addProduct(List.of(radish, radish, radish, radish, radish, radish));
+
+        MarketProducts mp = new MarketProducts();
+
+        mp.addProducts("fruits", "banana", mpFruitsBanana.getProducts());
+        mp.addProducts("fruits", "apple", mpFruitsApple.getProducts());
+        mp.addProducts("vegetables", "radish", mpVegetablesRadish.getProducts());
+        mp.addProducts("vegetables", "eggplant", mpVegetablesEggplant.getProducts());
 
 
-        Person john = new Person("John", 1963);
-        Person sara = new Person("Sara", 1960);
-        Person adel = new Person("Adel", 1990);
-        Person mikhail = new Person("Mikhail", 1993);
-        Person lama_su = new Person("Lama-su", 1970);
-        Person dick = new Person("Dick", 1962);
-        Person sam = new Person("Sam", 1963);
-        Person eina = new Person("Eina", 1965);
+        Market marketproduct = new Market(mp.getProductMap());
+
+        System.out.println(marketproduct.getProductMap());
+
+        UserScaner userScaner = new UserScaner();
 
 
-        john.setSpouse(sara);
+        while (true) {
 
-        adel.setMother(sara);
-        adel.setFather(john);
+            Human human = new Human(userScaner.scanner());
+            marketproduct.acceptToMarket(human);
+            System.out.println("Здравствуйте " + human.getName() + " !" + " Вы вошли в Маркет,ознакомьтесь с нашим ассортиментом");
+            PrintMarketProduct.printMarket(mp.getProductMap());
+            System.out.println();
 
-        mikhail.setFather(john);
-        mikhail.setMother(sara);
+            Thread.sleep(1000);
 
-
-        john.addSiblings(dick);
-        john.addSiblings(lama_su);
-        sara.addSiblings(eina);
-        sara.addSiblings(sam);
-
-        Tree tree = new Tree();
-
-        tree.addPerson(john);
-        tree.addPerson(sara);
-        tree.addPerson(adel);
-        tree.addPerson(mikhail);
-        tree.addPerson(dick);
-        tree.addPerson(lama_su);
-        tree.addPerson(eina);
-        tree.addPerson(sam);
-
-        tree.showRelatives();
+            if (userScaner.scanMakeOreder()) {
+                marketproduct.takeInQueue(human);
+                System.out.println(marketproduct.getQueue());
+                Map<Product, Integer> order = new HashMap<>();
+                System.out.println("Вот список категорий продуктов: ");
+                System.out.println(mp.getProductMap().keySet());
+                Thread.sleep(1000);
+                String category = userScaner.scanCategory();
+                System.out.println("Выберите сорт категории: ");
+                PrintMarketProduct.printSubCategory(mp.getProductMap(), category);
+                String subCategory = userScaner.scanSubCategory();
 
 
-        Person foundPerson = tree.findPerson("Jonh");
+                List<Product> products = mp.getProductMap().get(category).get(subCategory);
+                if (products == null || products.isEmpty()) {
+                    System.out.println("Подкатегория не найдена или пуста. Попробуйте снова.");
+                    return;
+                }
+
+                int count = userScaner.scanCountProduct();
+                if (count <= 0) {
+                    System.out.println("Количество должно быть положительным. Попробуйте снова.");
+                    return;
+                }
+
+                Product selectedProduct = products.get(0);
+
+                order.put(selectedProduct, count);
+
+                marketproduct.takeOrders(order);
+
+                if (userScaner.scanTakeOrder()) {
+
+                    marketproduct.giveOrders();
 
 
-        System.out.println();
+                    System.out.println("Ваш заказ:");
+                    for (Map.Entry<Product, Integer> entry : order.entrySet()) {
+                        System.out.println("Продукт: " + entry.getKey().getName() + ", Количество: " + entry.getValue());
+                    }
+                }
+                System.out.println(marketproduct.getQueue());
 
-        FileOperations fileOperations = new FileOperations();
 
-        try {
-            fileOperations.saves(tree, "familyTree.dat");
-            System.out.println("Файл сохранён");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println();
-
-        Tree loadtree = null;
-
-        try {
-            loadtree = fileOperations.load("familyTree.dat");
-            System.out.println("Фамильное дерево загружено из файла");
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println();
-
-        if (loadtree != null) {
-            for (Person person : loadtree.getListOfRelatives()) {
-                System.out.println("Loaded person:" +
-                        person.getName() + " " + person.getYearOfBirth());
             }
-        }
+            else {
+                System.out.println("Не торопитесь ,можете пока выбирать себе товар,как будете готовы,мы вас обслужим ");
+            }
+            Thread.sleep(2000);
 
+        }
+    }
+//
+//        System.out.println(marketproduct.getOrders());
+
+
+//        System.out.println(market.getProductMap());
+
+
+//        Person john = new Person("John", 1963);
+//        Person sara = new Person("Sara", 1960);
+//        Person adel = new Person("Adel", 1990);
+//        Person mikhail = new Person("Mikhail", 1993);
+//        Person lama_su = new Person("Lama-su", 1970);
+//        Person dick = new Person("Dick", 1962);
+//        Person sam = new Person("Sam", 1963);
+//        Person eina = new Person("Eina", 1965);
+//
+//
+//        john.setSpouse(sara);
+//
+//        adel.setMother(sara);
+//        adel.setFather(john);
+//
+//        mikhail.setFather(john);
+//        mikhail.setMother(sara);
+//
+//
+//        john.addSiblings(dick);
+//        john.addSiblings(lama_su);
+//        sara.addSiblings(eina);
+//        sara.addSiblings(sam);
+//
+//        Tree tree = new Tree();
+//
+//        tree.addPerson(john);
+//        tree.addPerson(sara);
+//        tree.addPerson(adel);
+//        tree.addPerson(mikhail);
+//        tree.addPerson(dick);
+//        tree.addPerson(lama_su);
+//        tree.addPerson(eina);
+//        tree.addPerson(sam);
+//
+//        tree.showRelatives();
+//
+//
+//        Person foundPerson = tree.findPerson("Jonh");
+//
+//
+//        System.out.println();
+//
+//        FileOperations fileOperations = new FileOperations();
+//
+//        try {
+//            fileOperations.saves(tree, "familyTree.dat");
+//            System.out.println("Файл сохранён");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        System.out.println();
+//
+//        Tree loadtree = null;
+//
+//        try {
+//            loadtree = fileOperations.load("familyTree.dat");
+//            System.out.println("Фамильное дерево загружено из файла");
+//        } catch (IOException | ClassNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//
+//        System.out.println();
+//
+//        if (loadtree != null) {
+//            for (Person person : loadtree.getListOfRelatives()) {
+//                System.out.println("Loaded person:" +
+//                        person.getName() + " " + person.getYearOfBirth());
+//            }
+//        }
 
 
 //        FluingAnimal duck = new Duck("Donald");
@@ -463,5 +571,6 @@ public class Main {
 //        System.out.println(products);
 
 
-        }
-    }
+//        }
+//
+}

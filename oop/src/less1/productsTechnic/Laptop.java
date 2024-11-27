@@ -1,9 +1,7 @@
-package less1.products2;
+package less1.productsTechnic;
 
 import less1.Technic;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Objects;
 
 public class Laptop extends Technic{
