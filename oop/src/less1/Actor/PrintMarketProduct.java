@@ -26,20 +26,6 @@ public class PrintMarketProduct {
         }
     }
 
-    public static void printSubCategory(Map<String, Map<String, List<Product>>> market, String subcategory) {
-
-        Map<String, List<Product>> products = market.get(subcategory);
-        System.out.println(products.keySet());
-
-    }
-
-//    public static Map<String,Integer>order(String name,int count){
-//
-//        Map<Product,Integer>oreders = new HashMap<>();
-//
-//
-//
-//    }
 
 
 }

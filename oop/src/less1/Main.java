@@ -324,71 +324,102 @@ public class Main {
             Human human = new Human(userScaner.scanner());
             marketproduct.acceptToMarket(human);
             System.out.println(marketproduct.getActors());
-            System.out.println("Здравствуйте " + human.getName() + " !" + " Вы вошли в Маркет,ознакомьтесь с нашим ассортиментом");
-            PrintMarketProduct.printMarket(mp.getProductMap());
+            if (!mp.getProductMap().isEmpty()) {
+                System.out.println("Здравствуйте " + human.getName() + " !" + " Вы вошли в Маркет,ознакомьтесь с нашим ассортиментом");
+                PrintMarketProduct.printMarket(mp.getProductMap());
+            } else {
+                System.out.println("Извините ,в данный момент сервис не работает,зайди в другой раз");
+            }
             System.out.println();
 
-            Thread.sleep(1000);
+            Thread.sleep(2000);
 
-            if (userScaner.scanMakeOreder()) {
-                marketproduct.takeInQueue(human);
-                System.out.println(marketproduct.getQueue());
-                Map<Product, Integer> order = new HashMap<>();
-                System.out.println("Вот список категорий продуктов: ");
-                System.out.println(mp.getProductMap().keySet());
-                Thread.sleep(1000);
-                String category = userScaner.scanCategory();
-                System.out.println("Выберите сорт категории: ");
-                PrintMarketProduct.printSubCategory(mp.getProductMap(), category);
-                String subCategory = userScaner.scanSubCategory();
+            if (userScaner.scanMakeOreder()) { // если человек готов сделать заказ
+                marketproduct.takeInQueue(human);// добавляем его в очередь
 
+                System.out.println(marketproduct.getQueue());// получить очередь
+                Map<Product, Integer> order = new HashMap<>();// создаём карту для заказов
 
-                List<Product> products = mp.getProductMap().get(category).get(subCategory);
-                if (products == null || products.isEmpty()) {
-                    System.out.println("Подкатегория не найдена или пуста. Попробуйте снова.");
-                    return;
-                }
+                while (true) {
+                    System.out.println("Вот список категорий продуктов: ");
+                    // показываем посетителю карту из имеющихся категорий продуктов
+                    System.out.println(mp.getProductMap().keySet());
 
-                int count = userScaner.scanCountProduct();
-                if (count <= 0) {
-                    System.out.println("Количество должно быть положительным. Попробуйте снова.");
-                    return;
-                }
+                    Thread.sleep(2000);
 
-                Product selectedProduct = products.get(0);
+//                String category = userScaner.scanCategory();// получаем от посетителя категорию
 
-                order.put(selectedProduct, count);
-
-                marketproduct.takeOrders(order);
-
-                if (userScaner.scanTakeOrder()) {
-
-                    marketproduct.giveOrders();
+//                Map<String, List<Product>> products = mp.getProductMap().get(category);
+//
+//                if (!products.values().isEmpty()) {
+//                    System.out.println("Вот продукты этой категории: ");
+//                    // показываем посетителю продукты из этой категории
+//                    System.out.println(products.keySet());
+//                }
 
 
-                    System.out.println("Ваш заказ:");
-                    for (Map.Entry<Product, Integer> entry : order.entrySet()) {
-                        System.out.println("Продукт: " + entry.getKey().getName() + ", Количество: " + entry.getValue());
+                    UserScaner userScaner1 = new UserScaner(marketproduct);
+
+                    String category = userScaner1.selectedCategory();
+
+
+                    String subCategory = userScaner.scanSubCategory(); // получаем выбор продукта из этой категории
+
+                    //получаем список продуктов из категории и подкатегории выбранным посетителем
+                    List<Product> productss = mp.getProductMap().get(category).get(subCategory);
+
+
+                    int size = productss.size(); // количество данного продукта
+
+                    UserScaner countprod = new UserScaner(productss);
+
+                    int count = countprod.requestForQuantity();// запрос у посетителя о количестве, с повтором
+
+                    Product product = productss.get(0);
+
+
+                    order.put(product, count);
+
+                    if (!userScaner.repeat()) {
+
+                        marketproduct.takeOrders(order);
+
+                        if (userScaner.scanTakeOrder()) {
+
+                            marketproduct.giveOrders();
+
+
+                            System.out.println("Ваш заказ:");
+                            for (Map.Entry<Product, Integer> entry : order.entrySet()) {
+                                System.out.println("Продукт: " + entry.getKey().getName() + ", Количество: " + entry.getValue());
+                            }
+                        }
+                        System.out.println(marketproduct.getQueue());
+                        marketproduct.releaseFromMarket(marketproduct.getActors());
+                        System.out.println(marketproduct.getActors());
+                        marketproduct.getProductMap().size();
+
+
+                        break;
                     }
+
                 }
-                System.out.println(marketproduct.getQueue());
-                marketproduct.releaseFromMarket(marketproduct.getActors());
-                System.out.println(marketproduct.getActors());
 
-
-            }
-            else {
+            } else {
                 System.out.println("Не торопитесь ,можете пока выбирать себе товар,как будете готовы,мы вас обслужим ");
             }
             Thread.sleep(2000);
 
         }
     }
+
+
+
+
+
+
 //
-//        System.out.println(marketproduct.getOrders());
 
-
-//        System.out.println(market.getProductMap());
 
 
 //        Person john = new Person("John", 1963);
