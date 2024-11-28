@@ -375,14 +375,21 @@ public class Main {
 
                     int count = countprod.requestForQuantity();// запрос у посетителя о количестве, с повтором
 
+                    System.out.println(productss.size());
+
+
                     Product product = productss.get(0);
 
 
                     order.put(product, count);
 
+                    marketproduct.update();
+
                     if (!userScaner.repeat()) {
 
                         marketproduct.takeOrders(order);
+                        marketproduct.update();
+                        System.out.println(productss.size());
 
                         if (userScaner.scanTakeOrder()) {
 
@@ -406,7 +413,7 @@ public class Main {
                 }
 
             } else {
-                System.out.println("Не торопитесь ,можете пока выбирать себе товар,как будете готовы,мы вас обслужим ");
+                System.out.println("Не торопитесь ,можете пока выбирать себе товар,мы пока что обслужим следующего, как будете готовы,мы обслужим вас ");
             }
             Thread.sleep(2000);
 

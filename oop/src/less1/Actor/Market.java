@@ -147,7 +147,7 @@ public class Market implements QueueBehaviour, MarketBehaviourt {
     public void giveOrders() {
 
             getOrders();
-            update();
+//            update();
             orders.clear();
             releaseFromQueue();
         }
