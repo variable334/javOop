@@ -1,7 +1,5 @@
 package less1.productsTechnic;
 
-import less1.Technic;
-
 import java.util.Objects;
 
 public class Laptop extends Technic{

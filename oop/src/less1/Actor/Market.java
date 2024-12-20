@@ -1,5 +1,6 @@
 package less1.Actor;
 
+import less1.Product.MarketForProducts.MarketProducts;
 import less1.Product.Product;
 
 import javax.xml.namespace.QName;
@@ -15,7 +16,7 @@ public class Market implements QueueBehaviour, MarketBehaviourt {
 
     private Map<String, Map<String, List<Product>>> productMap;
 
-    protected Human human;
+    private Human human;
 
     private UserScaner userScaner;
 
@@ -33,6 +34,7 @@ public class Market implements QueueBehaviour, MarketBehaviourt {
         this.userScaner = new UserScaner();
 
     }
+
 
 
     public Map<String, Map<String, List<Product>>> getProductMap() {
@@ -147,7 +149,6 @@ public class Market implements QueueBehaviour, MarketBehaviourt {
     public void giveOrders() {
 
             getOrders();
-//            update();
             orders.clear();
             releaseFromQueue();
         }

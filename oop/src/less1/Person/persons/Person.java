@@ -1,7 +1,5 @@
-package less1.Person;
+package less1.Person.persons;
 
-
-import less1.Person.Tree.Tree;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -26,6 +24,7 @@ public class Person implements Serializable {
         this.siblings = new ArrayList<>();
 
     }
+
 
     public String getclasName() {
         return getClass().getSimpleName();

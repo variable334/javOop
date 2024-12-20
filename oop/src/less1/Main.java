@@ -2,15 +2,12 @@ package less1;
 
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 
-import less1.Actor.*;
-import less1.Product.Fruits.Fruits;
-import less1.Product.MarketForProducts.MarketProducts;
-import less1.Product.Product;
-import less1.Product.Vegetables.Vegetables;
+import less1.Person.FileOperations;
+import less1.Person.persons.Person;
+import less1.Person.Tree.Tree;
 import less1.productsTechnic.Laptop;
 
 
@@ -280,145 +277,14 @@ public class Main {
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
 
-        Product apple = new Fruits("apple", 140.5, LocalDate.of(2024, 11, 13), 12, 1.0);
-        Product banana = new Fruits("banana", 152.4, LocalDate.of(2024, 11, 3), 9, 1.0);
-        Product grape = new Fruits("grape", 100, LocalDate.of(2024, 11, 1), 7, 1.0);
-
-        Product cabbage = new Vegetables("cabbage", 70, LocalDate.of(2024, 11, 12), 12, 1.0);
-        Product radish = new Vegetables("radish", 60, LocalDate.of(2024, 11, 1), 19, 1.0);
-        Product eggplant = new Vegetables("eggplant", 40, LocalDate.of(2024, 11, 3), 13, 1.0);
-
-        MarketProducts mpFruitsApple = new MarketProducts();
-        MarketProducts mpFruitsBanana = new MarketProducts();
-        MarketProducts mpFruitsGrape = new MarketProducts();
-
-        MarketProducts mpVegetablesCabbage = new MarketProducts();
-        MarketProducts mpVegetablesEggplant = new MarketProducts();
-        MarketProducts mpVegetablesRadish = new MarketProducts();
-
-        mpFruitsApple.addProduct(List.of(apple, apple, apple, apple, apple, apple));
-        mpFruitsBanana.addProduct(List.of(banana, banana, banana, banana, banana, banana));
-        mpFruitsGrape.addProduct(List.of(grape, grape, grape, grape, grape, grape, grape));
-
-        mpVegetablesCabbage.addProduct(List.of(cabbage, cabbage, cabbage, cabbage, cabbage, cabbage));
-        mpVegetablesEggplant.addProduct(List.of(eggplant, eggplant, eggplant, eggplant, eggplant, eggplant));
-        mpVegetablesRadish.addProduct(List.of(radish, radish, radish, radish, radish, radish));
-
-        MarketProducts mp = new MarketProducts();
-
-        mp.addProducts("fruits", "banana", mpFruitsBanana.getProducts());
-        mp.addProducts("fruits", "apple", mpFruitsApple.getProducts());
-        mp.addProducts("vegetables", "radish", mpVegetablesRadish.getProducts());
-        mp.addProducts("vegetables", "eggplant", mpVegetablesEggplant.getProducts());
 
 
-        Market marketproduct = new Market(mp.getProductMap());
-
-        System.out.println(marketproduct.getProductMap());
-
-        UserScaner userScaner = new UserScaner();
 
 
-        while (true) {
-
-            Human human = new Human(userScaner.scanner());
-            marketproduct.acceptToMarket(human);
-            System.out.println(marketproduct.getActors());
-            if (!mp.getProductMap().isEmpty()) {
-                System.out.println("Здравствуйте " + human.getName() + " !" + " Вы вошли в Маркет,ознакомьтесь с нашим ассортиментом");
-                PrintMarketProduct.printMarket(mp.getProductMap());
-            } else {
-                System.out.println("Извините ,в данный момент сервис не работает,зайди в другой раз");
-            }
-            System.out.println();
-
-            Thread.sleep(2000);
-
-            if (userScaner.scanMakeOreder()) { // если человек готов сделать заказ
-                marketproduct.takeInQueue(human);// добавляем его в очередь
-
-                System.out.println(marketproduct.getQueue());// получить очередь
-                Map<Product, Integer> order = new HashMap<>();// создаём карту для заказов
-
-                while (true) {
-                    System.out.println("Вот список категорий продуктов: ");
-                    // показываем посетителю карту из имеющихся категорий продуктов
-                    System.out.println(mp.getProductMap().keySet());
-
-                    Thread.sleep(2000);
-
-//                String category = userScaner.scanCategory();// получаем от посетителя категорию
-
-//                Map<String, List<Product>> products = mp.getProductMap().get(category);
-//
-//                if (!products.values().isEmpty()) {
-//                    System.out.println("Вот продукты этой категории: ");
-//                    // показываем посетителю продукты из этой категории
-//                    System.out.println(products.keySet());
-//                }
 
 
-                    UserScaner userScaner1 = new UserScaner(marketproduct);
-
-                    String category = userScaner1.selectedCategory();
 
 
-                    String subCategory = userScaner.scanSubCategory(); // получаем выбор продукта из этой категории
-
-                    //получаем список продуктов из категории и подкатегории выбранным посетителем
-                    List<Product> productss = mp.getProductMap().get(category).get(subCategory);
-
-
-                    int size = productss.size(); // количество данного продукта
-
-                    UserScaner countprod = new UserScaner(productss);
-
-                    int count = countprod.requestForQuantity();// запрос у посетителя о количестве, с повтором
-
-                    System.out.println(productss.size());
-
-
-                    Product product = productss.get(0);
-
-
-                    order.put(product, count);
-
-                    marketproduct.update();
-
-                    if (!userScaner.repeat()) {
-
-                        marketproduct.takeOrders(order);
-                        marketproduct.update();
-                        System.out.println(productss.size());
-
-                        if (userScaner.scanTakeOrder()) {
-
-                            marketproduct.giveOrders();
-
-
-                            System.out.println("Ваш заказ:");
-                            for (Map.Entry<Product, Integer> entry : order.entrySet()) {
-                                System.out.println("Продукт: " + entry.getKey().getName() + ", Количество: " + entry.getValue());
-                            }
-                        }
-                        System.out.println(marketproduct.getQueue());
-                        marketproduct.releaseFromMarket(marketproduct.getActors());
-                        System.out.println(marketproduct.getActors());
-                        marketproduct.getProductMap().size();
-
-
-                        break;
-                    }
-
-                }
-
-            } else {
-                System.out.println("Не торопитесь ,можете пока выбирать себе товар,мы пока что обслужим следующего, как будете готовы,мы обслужим вас ");
-            }
-            Thread.sleep(2000);
-
-        }
-    }
 
 
 
@@ -426,80 +292,178 @@ public class Main {
 
 
 //
+//        Completion completion = new Completion();
+//
+//        Market marketproduct = new Market(completion.getMp().getProductMap());
+//
+//        System.out.println(marketproduct.getProductMap());
+//
+//        PrintMarketProduct.printMarket(marketproduct.getProductMap());
 
 
-
-//        Person john = new Person("John", 1963);
-//        Person sara = new Person("Sara", 1960);
-//        Person adel = new Person("Adel", 1990);
-//        Person mikhail = new Person("Mikhail", 1993);
-//        Person lama_su = new Person("Lama-su", 1970);
-//        Person dick = new Person("Dick", 1962);
-//        Person sam = new Person("Sam", 1963);
-//        Person eina = new Person("Eina", 1965);
+//        UserScaner userScaner = new UserScaner();
 //
+//        while (true) {
 //
-//        john.setSpouse(sara);
-//
-//        adel.setMother(sara);
-//        adel.setFather(john);
-//
-//        mikhail.setFather(john);
-//        mikhail.setMother(sara);
-//
-//
-//        john.addSiblings(dick);
-//        john.addSiblings(lama_su);
-//        sara.addSiblings(eina);
-//        sara.addSiblings(sam);
-//
-//        Tree tree = new Tree();
-//
-//        tree.addPerson(john);
-//        tree.addPerson(sara);
-//        tree.addPerson(adel);
-//        tree.addPerson(mikhail);
-//        tree.addPerson(dick);
-//        tree.addPerson(lama_su);
-//        tree.addPerson(eina);
-//        tree.addPerson(sam);
-//
-//        tree.showRelatives();
-//
-//
-//        Person foundPerson = tree.findPerson("Jonh");
-//
-//
-//        System.out.println();
-//
-//        FileOperations fileOperations = new FileOperations();
-//
-//        try {
-//            fileOperations.saves(tree, "familyTree.dat");
-//            System.out.println("Файл сохранён");
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        System.out.println();
-//
-//        Tree loadtree = null;
-//
-//        try {
-//            loadtree = fileOperations.load("familyTree.dat");
-//            System.out.println("Фамильное дерево загружено из файла");
-//        } catch (IOException | ClassNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//
-//        System.out.println();
-//
-//        if (loadtree != null) {
-//            for (Person person : loadtree.getListOfRelatives()) {
-//                System.out.println("Loaded person:" +
-//                        person.getName() + " " + person.getYearOfBirth());
+//            Human human = new Human(userScaner.scanner());
+//            marketproduct.acceptToMarket(human);
+//            System.out.println(marketproduct.getActors());
+//            if (!mp.getProductMap().isEmpty()) {
+//                System.out.println("Здравствуйте " + human.getName() + " !" + " Вы вошли в Маркет,ознакомьтесь с нашим ассортиментом");
+//                PrintMarketProduct.printMarket(mp.getProductMap());
+//            } else {
+//                System.out.println("Извините ,в данный момент сервис не работает,зайди в другой раз");
 //            }
+//            System.out.println();
+//
+//            Thread.sleep(2000);
+//
+//            if (userScaner.scanMakeOreder()) { // если человек готов сделать заказ
+//                marketproduct.takeInQueue(human);// добавляем его в очередь
+//
+//                System.out.println(marketproduct.getQueue());// получить очередь
+//                Map<Product, Integer> order = new HashMap<>();// создаём карту для заказов
+//
+//                while (true) {
+//                    System.out.println("Вот список категорий продуктов: ");
+//                    // показываем посетителю карту из имеющихся категорий продуктов
+//                    System.out.println(mp.getProductMap().keySet());
+//
+//                    Thread.sleep(2000);
+//
+//                    UserScaner userScaner1 = new UserScaner(marketproduct);
+//
+//                    String category = userScaner1.selectedCategory();
+//
+//
+//                    String subCategory = userScaner.scanSubCategory(); // получаем выбор продукта из этой категории
+//
+//                    //получаем список продуктов из категории и подкатегории выбранным посетителем
+//                    List<Product> productss = mp.getProductMap().get(category).get(subCategory);
+//
+//                    int size = productss.size(); // количество данного продукта
+//
+//                    UserScaner countprod = new UserScaner(productss);
+//
+//                    int count = countprod.requestForQuantity();// запрос у посетителя о количестве, с повтором
+//
+//                    System.out.println(productss.size());
+//
+//                    Product product = productss.get(0);
+//
+//                    order.put(product, count);
+//
+//                    marketproduct.update();
+//
+//                    if (!userScaner.repeat()) {
+//
+//                        marketproduct.takeOrders(order);
+//                        marketproduct.update();
+//                        System.out.println(productss.size());
+//
+//                        if (userScaner.scanTakeOrder()) {
+//                            marketproduct.giveOrders();
+//                            System.out.println("Ваш заказ:");
+//                            for (Map.Entry<Product, Integer> entry : order.entrySet()) {
+//                                System.out.println("Продукт: " + entry.getKey().getName() + ", Количество: " + entry.getValue());
+//                            }
+//                        }
+//
+//                        System.out.println(marketproduct.getQueue());
+//                        marketproduct.releaseFromMarket(marketproduct.getActors());
+//                        System.out.println(marketproduct.getActors());
+//                        marketproduct.getProductMap().size();
+//                        break;
+//                    }
+//                }
+//            } else {
+//                System.out.println("Не торопитесь ,можете пока выбирать себе товар,мы пока что обслужим следующего, как будете готовы,мы обслужим вас ");
+//            }
+//            Thread.sleep(2000);
 //        }
+//    }
+
+
+//
+
+//
+        Person john = new Person("John", 1963);
+        Person sara = new Person("Sara", 1960);
+        Person adel = new Person("Adel", 1990);
+        Person mikhail = new Person("Mikhail", 1993);
+        Person lama_su = new Person("Lama-su", 1970);
+        Person dick = new Person("Dick", 1962);
+        Person sam = new Person("Sam", 1963);
+        Person eina = new Person("Eina", 1965);
+
+
+        john.setSpouse(sara);
+
+        adel.setMother(sara);
+        adel.setFather(john);
+
+        mikhail.setFather(john);
+        mikhail.setMother(sara);
+
+
+        john.addSiblings(dick);
+        john.addSiblings(lama_su);
+        sara.addSiblings(eina);
+        sara.addSiblings(sam);
+
+        Tree tree = new Tree();
+
+        tree.addPerson(john);
+        tree.addPerson(sara);
+        tree.addPerson(adel);
+        tree.addPerson(mikhail);
+        tree.addPerson(dick);
+        tree.addPerson(lama_su);
+        tree.addPerson(eina);
+        tree.addPerson(sam);
+
+//        tree.findPerson(john.getName());
+
+//        System.out.println();
+
+//        tree.sortByName();
+
+//        tree.showRelatives();
+
+        System.out.println();
+
+        tree.sortByYearOfBirth();
+
+        tree.showRelatives();
+
+        FileOperations fileOperations = new FileOperations();
+
+        try {
+            fileOperations.saves(tree, "familyTree.dat");
+            System.out.println("Файл сохранён");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println();
+
+        Tree loadtree = null;
+
+        try {
+            loadtree = fileOperations.load("familyTree.dat");
+            System.out.println("Фамильное дерево загружено из файла");
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println();
+
+        if (loadtree != null) {
+            for (Person person : loadtree.getListOfRelatives()) {
+                System.out.println("Loaded person:" +
+                        person.getName() + " " + person.getYearOfBirth());
+            }
+        }
 
 
 //        FluingAnimal duck = new Duck("Donald");
@@ -614,4 +578,5 @@ public class Main {
 
 //        }
 //
+    }
 }

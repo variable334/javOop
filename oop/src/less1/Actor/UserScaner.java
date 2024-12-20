@@ -15,7 +15,7 @@ public class UserScaner {
 
     private Market market;
 
-    private Map<String, List<Product>> products;
+//    private Map<String, List<Product>> products;
 
     public UserScaner(List<Product>list){
 
@@ -24,7 +24,7 @@ public class UserScaner {
     }
 
     public UserScaner(Map<String, List<Product>> products) {
-        this.products = products;
+//        this.products = products;
         this.scanner = new Scanner(System.in);
     }
 
