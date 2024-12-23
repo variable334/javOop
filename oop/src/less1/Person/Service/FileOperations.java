@@ -1,13 +1,13 @@
-package less1.Person;
+package less1.Person.Service;
 
 import less1.Person.Tree.Tree;
 
 import java.io.*;
 
-public class FileOperations implements actionsWithFiles, Serializable {
+public class FileOperations <T>implements actionsWithFiles<T>, Serializable{
 
     @Override
-    public void saves(Tree tree, String name) throws IOException {
+    public void saves(T tree, String name) throws IOException {
         try (FileOutputStream fileOut = new FileOutputStream(name);
              ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
             out.writeObject(tree);

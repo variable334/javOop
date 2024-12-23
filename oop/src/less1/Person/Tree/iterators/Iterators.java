@@ -5,11 +5,11 @@ import less1.Person.persons.Person;
 import java.util.Iterator;
 import java.util.List;
 
-public class Iterators implements Iterator<Person> {
+public class Iterators<T> implements Iterator<T> {
     private int index;
-    private List<Person>list;
+    private List<T>list;
 
-    public Iterators(List<Person> listOfRelatives) {
+    public Iterators(List<T> listOfRelatives) {
         this.list= listOfRelatives;
     }
 
@@ -19,7 +19,7 @@ public class Iterators implements Iterator<Person> {
     }
 
     @Override
-    public Person next() {
+    public T next() {
         return list.get(index++);
     }
 }

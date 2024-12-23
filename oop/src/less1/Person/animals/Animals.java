@@ -1,5 +1,4 @@
-package less1.Person.persons;
-
+package less1.Person.animals;
 
 import less1.Person.Tree.ManagementTree;
 
@@ -7,87 +6,92 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public class Person implements Serializable, ManagementTree<Person> {
+public class Animals implements Serializable, ManagementTree<Animals> {
 
     private static final long serialVersionUID = 1L;
+
     protected String name;
     private int yearOfBirth;
     private String face_type;
-    private Person mother;
-    private Person father;
-    private Person spouse;
-    private ArrayList<Person> siblings;
-    private ArrayList<Person> children;
+
+    private Animals mother;
+    private Animals father;
+    private Animals spouse;
+    private ArrayList<Animals> siblings;
+    private ArrayList<Animals> children;
 
 
-    public Person(String name, int yearOfBirth) {
+    public Animals(String name, int yearOfBirth) {
 
         this.name = name;
         this.yearOfBirth = yearOfBirth;
         this.children = new ArrayList<>();
         this.siblings = new ArrayList<>();
-        this.face_type = "Man";
-
+        this.face_type = "Animal";
     }
-    public Person(){
+    public Animals(){
         this.name = name;
         this.yearOfBirth = yearOfBirth;
         this.children = new ArrayList<>();
         this.siblings = new ArrayList<>();
-        this.face_type = "Man";
-
+        this.face_type = "Animal";
     }
 
     public String getclasName() {
         return getClass().getSimpleName();
     }
 
+    @Override
     public String getFace_type() {
         return face_type;
     }
 
-    public void addChild(Person child) {
+    public void addChild(Animals child) {
         this.children.add(child);
     }
 
-    public void addSiblings(Person sibling) {
+    public void addSiblings(Animals sibling) {
         this.siblings.add(sibling);
         sibling.siblings.add(this);
     }
 
-    public void setFather(Person father) {
+    public void setFather(Animals father) {
         this.father = father; // mikhail.setFather(Person father)
         if (!father.children.contains(this)) // есть ли this(сын или дочь)в списке детей отца.
             father.addChild(this);// если нет, то добавляем this(сын или дочь)в список детей отца.
     }
 
-    public void setMother(Person mother) {
+    public void setMother(Animals mother) {
         this.mother = mother;
         if (!mother.children.contains(this))
             mother.addChild(this);
     }
 
-
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setSpouse(Person partner) {
+    public void setSpouse(Animals partner) {
         this.spouse = partner;
         if (partner.spouse != this)// если партнер еще не является супругом
             partner.setSpouse(this);//то партнер становится супругом этого объекта this
     }
 
 
-    public ArrayList<Person> getChildren() {
+    public ArrayList<Animals> getChildren() {
         return children;
     }
 
-    public Person getFather() {
+    @Override
+    public ArrayList<Animals> getSiblings() {
+        return siblings;
+    }
+
+    public Animals getFather() {
         return father;
     }
 
-    public Person getMother() {
+    public Animals getMother() {
         return mother;
     }
 
@@ -95,16 +99,15 @@ public class Person implements Serializable, ManagementTree<Person> {
         return name;
     }
 
-    public ArrayList<Person> getSiblings() {
-        return siblings;
-    }
-
-    public Person getSpouse() {
+    public Animals getSpouse() {
         return spouse;
     }
 
     public int getYearOfBirth() {
         return yearOfBirth;
     }
+
+
+
 
 }

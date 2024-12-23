@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
-import less1.Person.FileOperations;
+import less1.Person.Service.FileOperations;
+import less1.Person.Service.ShowTree;
+import less1.Person.animals.Animals;
 import less1.Person.persons.Person;
 import less1.Person.Tree.Tree;
 import less1.productsTechnic.Laptop;
@@ -277,20 +279,6 @@ public class Main {
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //
 //        Completion completion = new Completion();
 //
@@ -396,6 +384,11 @@ public class Main {
         Person sam = new Person("Sam", 1963);
         Person eina = new Person("Eina", 1965);
 
+        Animals wolwJack = new Animals("Jack", 1990);
+        Animals wolwLuna = new Animals("Luna", 1992);
+        Animals wolwMicael = new Animals("Micael", 2020);
+        Animals wolwRin = new Animals("Rin", 2022);
+
 
         john.setSpouse(sara);
 
@@ -411,6 +404,9 @@ public class Main {
         sara.addSiblings(eina);
         sara.addSiblings(sam);
 
+        adel.addSiblings(mikhail);
+
+
         Tree tree = new Tree();
 
         tree.addPerson(john);
@@ -422,19 +418,53 @@ public class Main {
         tree.addPerson(eina);
         tree.addPerson(sam);
 
-//        tree.findPerson(john.getName());
+
+        wolwJack.setSpouse(wolwLuna);
+
+        wolwMicael.setFather(wolwJack);
+        wolwMicael.setMother(wolwLuna);
+
+        wolwRin.setFather(wolwJack);
+        wolwRin.setMother(wolwLuna);
+
+        wolwMicael.addSiblings(wolwRin);
+
+        Tree treeanimals = new Tree();
+
+        treeanimals.addPerson(wolwJack);
+        treeanimals.addPerson(wolwLuna);
+        treeanimals.addPerson(wolwMicael);
+        treeanimals.addPerson(wolwRin);
+
+        ShowTree showAnimals = new ShowTree<>(treeanimals);
+
+        ShowTree show = new ShowTree<>(tree);
+
+//        show.findPerson(john.getName());
 
 //        System.out.println();
 
-//        tree.sortByName();
+        tree.sortByName();
+        treeanimals.sortByName();
 
-//        tree.showRelatives();
-
+        System.out.println("Семейство людей: ");
         System.out.println();
+        show.PrintTree();
+
+        System.out.println("Семейство животных: ");
+        System.out.println();
+        showAnimals.PrintTree();
+
+
 
         tree.sortByYearOfBirth();
 
-        tree.showRelatives();
+        show.PrintTree();
+
+
+        System.out.println();
+        System.out.println("Сохранение проекта");
+        System.out.println();
 
         FileOperations fileOperations = new FileOperations();
 
@@ -445,9 +475,11 @@ public class Main {
             e.printStackTrace();
         }
 
+
+        System.out.println("Выгрузка проекта(Люди)");
         System.out.println();
 
-        Tree loadtree = null;
+        Tree<Person> loadtree = null;
 
         try {
             loadtree = fileOperations.load("familyTree.dat");
@@ -464,6 +496,45 @@ public class Main {
                         person.getName() + " " + person.getYearOfBirth());
             }
         }
+
+        System.out.println();
+        System.out.println("Сохранение проекта(Животные)");
+        System.out.println();
+
+
+        try {
+            fileOperations.saves(treeanimals, "familyTree.dat");
+            System.out.println("Файл сохранён");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println();
+
+        System.out.println("Выгрузка проекта(Животные)");
+        System.out.println();
+
+        Tree<Animals> loadtree1 = null;
+
+        try {
+            loadtree1 = fileOperations.load("familyTree.dat");
+            System.out.println("Фамильное дерево загружено из файла");
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println();
+
+        if (loadtree1 != null) {
+            for (Animals person : loadtree1.getListOfRelatives()) {
+                System.out.println("Loaded person:" +
+                        person.getName() + " " + person.getYearOfBirth());
+            }
+        }
+
+
+        System.out.println();
+
 
 
 //        FluingAnimal duck = new Duck("Donald");

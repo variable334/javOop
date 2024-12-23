@@ -1,12 +1,12 @@
 package less1.Person.comparable;
 
-import less1.Person.persons.Person;
+import less1.Person.Tree.ManagementTree;
 
 import java.util.Comparator;
 
-public class ComaparePersonByYearOfBirth implements Comparator<Person> {
+public class ComaparePersonByYearOfBirth<T extends ManagementTree> implements Comparator<T> {
     @Override
-    public int compare(Person o1, Person o2) {
+    public int compare(T o1, T o2) {
         return o1.getYearOfBirth()-o2.getYearOfBirth();
     }
 }
