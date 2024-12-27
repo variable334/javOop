@@ -1,6 +1,7 @@
 package less1;
 
 
+import java.io.Console;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -440,12 +441,18 @@ public class Main {
 
         ShowTree show = new ShowTree<>(tree);
 
-//        show.findPerson(john.getName());
-
+//        System.out.println("Поиск Персоны ");
 //        System.out.println();
+//        show.findPerson(john.getName());
+//        System.out.println();
+//
+//        System.out.println("Поиск Животного");
+//        System.out.println();
+//        showAnimals.findPerson(wolwMicael.getName());
+        System.out.println();
 
-        tree.sortByName();
-        treeanimals.sortByName();
+//        tree.sortByName();
+//        treeanimals.sortByName();
 
         System.out.println("Семейство людей: ");
         System.out.println();
@@ -456,11 +463,8 @@ public class Main {
         showAnimals.PrintTree();
 
 
-
-        tree.sortByYearOfBirth();
-
-        show.PrintTree();
-
+//        tree.sortByYearOfBirth();
+//        treeanimals.sortByYearOfBirth();
 
         System.out.println();
         System.out.println("Сохранение проекта");
@@ -469,71 +473,72 @@ public class Main {
         FileOperations fileOperations = new FileOperations();
 
         try {
-            fileOperations.saves(tree, "familyTree.dat");
+            fileOperations.saves(tree, "familyTree.doc");
             System.out.println("Файл сохранён");
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-
+        System.out.println();
         System.out.println("Выгрузка проекта(Люди)");
         System.out.println();
 
-        Tree<Person> loadtree = null;
+//        Tree<Person> loadtree = null;
+//
+//        try {
+//            loadtree = fileOperations.load("familyTree.doc");
+//            System.out.println("Фамильное дерево загружено из файла");
+//        } catch (IOException | ClassNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//
+//        System.out.println();
+//
+//        if (loadtree != null) {
+//            for (Person person : loadtree.getListOfRelatives()) {
+//                System.out.println("Loaded person:" +
+//                        person.getName() + " " + person.getYearOfBirth());
+//            }
+//        }
+//
+//        System.out.println();
+//        System.out.println("Сохранение проекта(Животные)");
+//        System.out.println();
+//
+//
+//        try {
+//            fileOperations.saves(treeanimals, "familyTree.dat");
+//            System.out.println("Файл сохранён");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        System.out.println();
+//
+//        System.out.println("Выгрузка проекта(Животные)");
+//        System.out.println();
+//
+//        Tree<Animals> loadtree1 = null;
+//
+//        try {
+//            loadtree1 = fileOperations.load("familyTree.dat");
+//            System.out.println("Фамильное дерево загружено из файла");
+//        } catch (IOException | ClassNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//
+//        System.out.println();
+//
+//        if (loadtree1 != null) {
+//            for (Animals person : loadtree1.getListOfRelatives()) {
+//                System.out.println("Loaded person:" +
+//                        person.getName() + " " + person.getYearOfBirth());
+//            }
+//        }
+//
+//
+//        System.out.println();
 
-        try {
-            loadtree = fileOperations.load("familyTree.dat");
-            System.out.println("Фамильное дерево загружено из файла");
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println();
-
-        if (loadtree != null) {
-            for (Person person : loadtree.getListOfRelatives()) {
-                System.out.println("Loaded person:" +
-                        person.getName() + " " + person.getYearOfBirth());
-            }
-        }
-
-        System.out.println();
-        System.out.println("Сохранение проекта(Животные)");
-        System.out.println();
-
-
-        try {
-            fileOperations.saves(treeanimals, "familyTree.dat");
-            System.out.println("Файл сохранён");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println();
-
-        System.out.println("Выгрузка проекта(Животные)");
-        System.out.println();
-
-        Tree<Animals> loadtree1 = null;
-
-        try {
-            loadtree1 = fileOperations.load("familyTree.dat");
-            System.out.println("Фамильное дерево загружено из файла");
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println();
-
-        if (loadtree1 != null) {
-            for (Animals person : loadtree1.getListOfRelatives()) {
-                System.out.println("Loaded person:" +
-                        person.getName() + " " + person.getYearOfBirth());
-            }
-        }
-
-
-        System.out.println();
 
 
 

@@ -1,9 +1,9 @@
-package less1.Person.Tree;
+package less2.model.Tree;
 
 
-import less1.Person.Tree.iterators.Iterators;
-import less1.Person.comparable.ComaparePersonByName;
-import less1.Person.comparable.ComaparePersonByYearOfBirth;
+import less2.model.Tree.iterators.Iterators;
+import less2.model.comparable.ComaparePersonByName;
+import less2.model.comparable.ComaparePersonByYearOfBirth;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,6 +13,7 @@ import java.util.List;
 
 
 public class Tree <T extends ManagementTree<T>> implements Serializable, Iterable<T> {
+
     private static final long serialVersionUID = 1L;
 
     private List<T> listOfRelatives;
@@ -37,6 +38,7 @@ public class Tree <T extends ManagementTree<T>> implements Serializable, Iterabl
         }
         return null;
     }
+
     @Override
     public Iterator<T> iterator() {
         return new Iterators(listOfRelatives);
